@@ -29,6 +29,9 @@ module.exports = {
           key: 'id'
         }
       },
+      room_no: {
+        type: Sequelize.STRING
+      },
       password_hash: {
         type: Sequelize.STRING
       },

@@ -1,12 +1,11 @@
 class CustomError extends Error {
-    status;
-    constructor(message, status) {
+    statusCode;
+    constructor(message) {
         super(message);
-        this.status = status;
     }
     serializeErrors() {
         return [{ message: this.message }];
     }
 }
 
-export { CustomError };
+module.exports = CustomError;

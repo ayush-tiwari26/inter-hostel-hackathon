@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      students.belongsTo(models.entities, { foreignKey: 'hostel_id' });
     }
   }
   students.init({
@@ -19,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     phone: DataTypes.STRING,
     hostel_id: DataTypes.INTEGER,
+    room_no: DataTypes.STRING,
     password_hash: DataTypes.STRING,
     status: DataTypes.BOOLEAN
   }, {
