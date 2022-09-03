@@ -2,21 +2,43 @@ import React from 'react'
 import Snackbar from '../Components/Snackbar/Snackbar'
 import ReadableTicket from '../Components/Ticket/ReadableTicket'
 import EditableTicket from '../Components/Ticket/EditableTicket'
-import { Button, Grid, Stack } from '@mui/material'
+import { Grid, Stack } from '@mui/material'
 import { UserContext } from '../Providers/UserStateProvider'
+import axios from 'axios'
 
 export default function Complains() {
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = React.useState(false);
-    const [snackbarType, setSnackbarType] = React.useState("success");
+    const {
+        userTickets,
+        setUserTickets,
+        userToken,
+        setOpenSnackbar,
+        setSnackbarMessage,
+        setSnackbarType
+    } = React.useContext(UserContext);
     React.useEffect(() => {
         //set state for snackbar
-        setOpenSnackbar(true);
-        setSnackbarMessage("Login Successful");
-        setSnackbarType("success");
+        //TODO: Fetch user tickets
+        let config = {
+            method: 'get',
+            url: 'https://hostel-complaint.herokuapp.com/tickets',
+            headers: {
+                'Authorization': userToken,
+            }
+        }
+        axios(config)
+            .then((response) => {
+                setUserTickets(response.data);
+                setSnackbarMessage("Tickets Loaded")
+                setSnackbarType("success")
+                setOpenSnackbar(true)
+            })
+            .catch((error) => {
+                setSnackbarMessage("Failed to load tickets")
+                setSnackbarType("error")
+                setOpenSnackbar(true)
+                console.log(error)
+            });
     }, [])
-    const { userTickets } = React.useContext(UserContext);
-
     //Function to create all tickets and messages from the db
     function createReadableTickets() {
         //map all tickets from userContext and display
@@ -30,11 +52,11 @@ export default function Complains() {
                         return <ReadableTicket
                             index={index}
                             key={index}
-                            messages={ticket.messages}
+                            messages={ticket.comments}
                             title={ticket.title}
                             description={ticket.description}
                             status={ticket.status}
-                            ticketId={ticket.ticketId}
+                            ticketId={ticket.id}
                         />
                     })}
                 </Grid>
@@ -55,11 +77,6 @@ export default function Complains() {
         )
     }
 
-    //create new ticket
-    function createEditableTicket() {
-        console.log("Create Command for new Ticket and adding to ticket list")
-    }
-
     return (
         <div>
             <Stack
@@ -68,12 +85,7 @@ export default function Complains() {
                 {createReadableTickets()}
                 {showEditableTicket()}
             </Stack>
-            <Snackbar
-                open={openSnackbar}
-                setOpen={setOpenSnackbar}
-                message={snackbarMessage}
-                type={snackbarType}>
-            </Snackbar>
+            <Snackbar />
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Message from '../Message/ReadableMessage';
+import axios from 'axios';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import { UserContext } from '../../Providers/UserStateProvider';
 
@@ -15,19 +15,54 @@ import { UserContext } from '../../Providers/UserStateProvider';
  * @return Message Component with given or edited Message, Timestamp
  */
 export default function EditableTicket(props) {
-    const { title, description, ticketId, editable } = props;
-    const [ticketTitle, setTicketTitle] = React.useState(title);
-    const [ticketDescription, setTicketDescription] = React.useState(description);
-    const { userTickets, setUserTickets } = React.useContext(UserContext);
+    const [ticketTitle, setTicketTitle] = React.useState("");
+    const [ticketDescription, setTicketDescription] = React.useState("");
+    const {
+        userTickets,
+        setUserTickets,
+        userToken,
+        setSnackbarMessage,
+        setSnackbarType,
+        setOpenSnackbar,
+    } = React.useContext(UserContext);
 
     function saveTicket() {
+        setTicketTitle(ticketTitle.trim())
+        setTicketDescription(ticketDescription.trim())
+        if (!ticketTitle || !ticketDescription) {
+            setSnackbarMessage("Please fill out all fields")
+            setOpenSnackbar(true)
+            setSnackbarType("error")
+            return
+        }
         //save this new ticket
-        const newTicket = {
+        const data = JSON.stringify({
             "title": ticketTitle,
             "description": ticketDescription,
+        })
+        const config = {
+            method: 'post',
+            url: 'https://hostel-complaint.herokuapp.com/tickets',
+            headers: {
+                'Authorization': userToken,
+                'Content-Type': 'application/json'
+            },
+            data: data
         }
-        //TODO: POST THIS TICKET AND ADD TO USER TICKETS
-        //TODO: Make Post request to save this ticket
+        axios(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data))
+                setUserTickets([...userTickets, response.data])
+                setSnackbarMessage("Successfully created ticket")
+                setOpenSnackbar(true)
+                setSnackbarType("success")
+            })
+            .catch((error) => {
+                setSnackbarMessage("Oops! Something went wrong...")
+                setOpenSnackbar(true)
+                setSnackbarType("error")
+                console.error(error);
+            })
     }
 
     return (
@@ -35,7 +70,7 @@ export default function EditableTicket(props) {
             <Stack
                 direction="column"
                 spacing={2}>
-                
+
                 <Typography variant="h4" component="h2">
                     Raise new Complain Ticket
                 </Typography>
@@ -44,13 +79,13 @@ export default function EditableTicket(props) {
                     label="Title"
                     variant="outlined"
                     value={ticketTitle}
-                    onChange={(event) => setTicketTitle((event.target.value).trim())} />
+                    onChange={(event) => setTicketTitle(event.target.value)} />
                 <TextField
                     id="outlined-password-input"
                     label="Description"
                     autoComplete="current-password"
                     value={ticketDescription}
-                    onChange={(event) => setTicketDescription((event.target.value).trim())}
+                    onChange={(event) => setTicketDescription(event.target.value)}
                 />
                 <Button
                     variant="contained"

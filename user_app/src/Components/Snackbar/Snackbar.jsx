@@ -3,12 +3,17 @@ import { Alert, Snackbar as SBar } from '@mui/material'
 import { UserContext } from '../../Providers/UserStateProvider'
 
 export default function Snackbar() {
+    const [state, setState] = React.useState({
+        vertical: 'bottom',
+        horizontal: 'right',
+    });
+    const { vertical, horizontal, open } = state;
     const {
         openSnackbar,
         setOpenSnackbar,
         snackbarMessage,
         snackbarType,
-      } = React.useContext(UserContext);
+    } = React.useContext(UserContext);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -18,7 +23,11 @@ export default function Snackbar() {
     };
 
     return (
-        <SBar open={openSnackbar} autoHideDuration={3000} onClose={handleClose}>
+        <SBar
+            anchorOrigin={{ vertical, horizontal }}
+            open={openSnackbar}
+            autoHideDuration={3000}
+            onClose={handleClose}>
             <Alert onClose={handleClose} severity={snackbarType} sx={{ width: '100%' }}>
                 {snackbarMessage}
             </Alert>

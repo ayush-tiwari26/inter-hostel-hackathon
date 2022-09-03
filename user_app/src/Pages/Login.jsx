@@ -9,14 +9,11 @@ export default function Login(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const {
-        setUserEmail,
+        userToken,
         setUserToken,
         setUserTickets,
-        openSnackbar,
         setOpenSnackbar,
-        snackbarMessage,
         setSnackbarMessage,
-        snackbarType,
         setSnackbarType
     } = React.useContext(UserContext);
     //Function to validate email
@@ -48,7 +45,8 @@ export default function Login(props) {
             console.log("Login Triggered");
             axios(config)
                 .then((response) => {
-                    console.log(JSON.stringify(response));
+                    console.log(response.headers.authorization);
+                    setUserToken(response.headers.authorization)
                     setSnackbarMessage("Login Successful");
                     setSnackbarType("success");
                     setOpenSnackbar(true);
