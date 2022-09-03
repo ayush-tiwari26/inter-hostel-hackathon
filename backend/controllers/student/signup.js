@@ -3,6 +3,7 @@ const { BadRequestError } = require('../../errors/bad_request_error');
 const { students } = require('../../models');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { sendmail } = require('../../utils/sendmail');
 const signup = async (req, res) => {
     if (!req.currentUser?.admin) {
         throw new NotAuthorizedError("Not authorized");
