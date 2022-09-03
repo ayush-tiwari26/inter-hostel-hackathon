@@ -42,6 +42,7 @@ const UserStateProvider = ({ children }) => {
         ]
         setUserTickets(demoUserTickets);
     }, [])
+
     return (
         <UserContext.Provider value={{ userEmail, setUserEmail, userToken, setUserToken, userTickets, setUserTickets}}>
             {children}

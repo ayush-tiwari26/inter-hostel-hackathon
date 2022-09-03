@@ -1,11 +1,11 @@
 import React from 'react'
 import Snackbar from '../Components/Snackbar/Snackbar'
-import Ticket from '../Components/Ticket/Ticket'
+import ReadableTicket from '../Components/Ticket/ReadableTicket'
 import { Button, Stack } from '@mui/material'
 import { UserContext } from '../Providers/UserStateProvider'
 
 
-export default function Complaints() {
+export default function Complains() {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState(false);
     const [snackbarType, setSnackbarType] = React.useState("success");
@@ -15,19 +15,21 @@ export default function Complaints() {
         setSnackbarMessage("Login Successful");
         setSnackbarType("success");
     }, [])
-    const { userTickets, setUserTickets } = React.useContext(UserContext);
+    const { userTickets } = React.useContext(UserContext);
+
     //Function to create all tickets and messages from the db
-    function makeTickets() {
+    function createReadableTickets() {
         //map all tickets from userContext and display
         return (
             <div>
                 {userTickets.map((ticket, index) => {
-                    return <Ticket
+                    return <ReadableTicket
                         index={index}
                         messages={ticket.messages}
                         title={ticket.title}
                         description={ticket.description}
                         status={ticket.status}
+                        ticketId={ticket.ticketId}
                     />
                 })}
             </div>
@@ -35,20 +37,8 @@ export default function Complaints() {
     }
 
     //create new ticket
-    function createNewTicket() {
-        if (userTickets.length !== 0) {
-            const lastTicket = userTickets[userTickets.length - 1];
-            if ((lastTicket.title).trim().length === 0 || (lastTicket.description).trim().length === 0) {
-                //show snackbar
-                setOpenSnackbar(true);
-                setSnackbarMessage("Please fill the last ticket before creating new");
-                setSnackbarType("error");
-                return;
-            }
-            //create new ticket
-            const newTicket = <Ticket />
-            setUserTickets([...userTickets, newTicket]);
-        }
+    function createEditableTicket() {
+        console.log("Create Command for new Ticket and adding to ticket list")
     }
 
     return (
@@ -56,14 +46,14 @@ export default function Complaints() {
             <Stack
                 direction="column"
                 spacing={2}>
-                {makeTickets()}
+                {createReadableTickets()}
                 <Button
                     variant="contained"
                     color="success"
                     sx={{
                         width: '200px'
                     }}
-                    onClick={createNewTicket}>
+                    onClick={createEditableTicket}>
                     Create Ticket
                 </Button>
             </Stack>
