@@ -1,17 +1,14 @@
 import React from 'react'
 
-export const UserContext = React.createContext()
+export const AdminContext = React.createContext()
 
-const UserStateProvider = ({ children }) => {
-    const [userEmail, setUserEmail] = React.useState("")
-    const [userToken, setUserToken] = React.useState("")
-    const [userTickets, setUserTickets] = React.useState([])
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = React.useState(false);
-    const [snackbarType, setSnackbarType] = React.useState("success");
-    //TODO user auth verification
+const AdminStateProvider = ({ children }) => {
+    const [adminEmail, setAdminEmail] = React.useState("")
+    const [adminToken, setAdminToken] = React.useState("")
+    const [adminTickets, setAdminTickets] = React.useState([])
+    //TODO admin auth verification
     React.useEffect(() => {
-        const demoUserTickets = [
+        const demoAdminTickets = [
             {
                 title: "Demo Ticket 1",
                 description: "Demo Description 1",
@@ -43,27 +40,14 @@ const UserStateProvider = ({ children }) => {
                 ]
             }
         ]
-        setUserTickets(demoUserTickets);
+        setAdminTickets(demoAdminTickets);
     }, [])
 
     return (
-        <UserContext.Provider value={{
-            userEmail,
-            setUserEmail,
-            userToken,
-            setUserToken,
-            userTickets,
-            setUserTickets,
-            openSnackbar,
-            setOpenSnackbar,
-            snackbarMessage,
-            setSnackbarMessage,
-            snackbarType,
-            setSnackbarType
-        }}>
+        <AdminContext.Provider value={{ adminEmail, setAdminEmail, adminToken, setAdminToken, adminTickets, setAdminTickets}}>
             {children}
-        </UserContext.Provider>
+        </AdminContext.Provider>
     )
 }
 
-export default UserStateProvider;
+export default AdminStateProvider;

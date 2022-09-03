@@ -1,9 +1,8 @@
 import React from 'react'
 import Snackbar from '../Components/Snackbar/Snackbar'
 import ReadableTicket from '../Components/Ticket/ReadableTicket'
-import EditableTicket from '../Components/Ticket/EditableTicket'
 import { Button, Grid, Stack } from '@mui/material'
-import { UserContext } from '../Providers/UserStateProvider'
+import { AdminContext } from '../Providers/AdminStateProvider'
 
 export default function Complains() {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -15,21 +14,21 @@ export default function Complains() {
         setSnackbarMessage("Login Successful");
         setSnackbarType("success");
     }, [])
-    const { userTickets } = React.useContext(UserContext);
+    const { adminTickets } = React.useContext(AdminContext);
 
     //Function to create all tickets and messages from the db
     function createReadableTickets() {
-        //map all tickets from userContext and display
+        //map all tickets from adminContext and display
         return (
             <Grid
+                spacing={4}
                 sx={{
                     padding: 2
                 }}>
                 <Grid item>
-                    {userTickets.map((ticket, index) => {
+                    {adminTickets.map((ticket, index) => {
                         return <ReadableTicket
                             index={index}
-                            key={index}
                             messages={ticket.messages}
                             title={ticket.title}
                             description={ticket.description}
@@ -42,31 +41,12 @@ export default function Complains() {
         )
     }
 
-    function showEditableTicket() {
-        return (
-            <Grid
-                container
-                spacing={4}
-                sx={{
-                    padding: 2
-                }}>
-                <EditableTicket />
-            </Grid>
-        )
-    }
-
-    //create new ticket
-    function createEditableTicket() {
-        console.log("Create Command for new Ticket and adding to ticket list")
-    }
-
     return (
         <div>
             <Stack
                 direction="column"
                 spacing={2}>
                 {createReadableTickets()}
-                {showEditableTicket()}
             </Stack>
             <Snackbar
                 open={openSnackbar}

@@ -1,24 +1,14 @@
 import React from 'react'
-import axios from 'axios'
 import { Button, Grid, Stack, TextField } from '@mui/material'
 import Snackbar from '../Components/Snackbar/Snackbar'
-import UserStateProvider from '../Providers/UserStateProvider'
-import { UserContext } from '../Providers/UserStateProvider'
 
 export default function Login(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const {
-        setUserEmail,
-        setUserToken,
-        setUserTickets,
-        openSnackbar,
-        setOpenSnackbar,
-        snackbarMessage,
-        setSnackbarMessage,
-        snackbarType,
-        setSnackbarType
-    } = React.useContext(UserContext);
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [snackbarMessage,     setSnackbarMessage] = React.useState(false);
+    const [snackbarType, setSnackbarType] = React.useState("success");
+
     //Function to validate email
     const validateEmail = (email) => {
         //TODO: Validate email
@@ -30,41 +20,18 @@ export default function Login(props) {
         //     );
     };
 
-    //Handels the Login for the user
+    //Handels the Login for the admin
     function handleLogin() {
-        const data = JSON.stringify({
-            "email": email,
-            "password": password
-        })
-        const config = {
-            method: 'post',
-            url: 'https://hostel-complaint.herokuapp.com/student/signin',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
+        console.log("Enter Triggered 1");
+        //TODO: Handle Login and set admin as login
         if (validateEmail(email)) {
-            console.log("Login Triggered");
-            axios(config)
-                .then((response) => {
-                    console.log(JSON.stringify(response));
-                    setSnackbarMessage("Login Successful");
-                    setSnackbarType("success");
-                    setOpenSnackbar(true);
-                    props.setIsLogin(true);
-                })
-                .catch((error) => {
-                    console.log(error);
-                    setSnackbarMessage("Login Failed");
-                    setSnackbarType("error");
-                    setOpenSnackbar(true);
-                    props.setIsLogin(false);
-                });
-        } else {
-            setSnackbarMessage("Invalid Email");
-            setSnackbarType("error");
+            console.log("Enter Triggered 2");
+            //TODO: Login the admin
+            setSnackbarMessage("Login Successful");
+            setSnackbarType("success");
             setOpenSnackbar(true);
+            props.setIsLogin(true);
+        } else {
             console.log("email invalid");
         }
     }
@@ -123,6 +90,12 @@ export default function Login(props) {
                     </Stack>
                 </Stack>
             </Grid>
+            <Snackbar
+                open={openSnackbar}
+                setOpen={setOpenSnackbar}
+                message={snackbarMessage}
+                type={snackbarType}>
+            </Snackbar>
         </Grid>
     )
 }

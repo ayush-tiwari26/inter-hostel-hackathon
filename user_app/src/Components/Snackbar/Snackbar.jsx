@@ -1,19 +1,26 @@
 import React from 'react'
 import { Alert, Snackbar as SBar } from '@mui/material'
+import { UserContext } from '../../Providers/UserStateProvider'
 
-export default function Snackbar(props) {
+export default function Snackbar() {
+    const {
+        openSnackbar,
+        setOpenSnackbar,
+        snackbarMessage,
+        snackbarType,
+      } = React.useContext(UserContext);
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
-        props.setOpen(false);
+        setOpenSnackbar(false);
     };
 
     return (
-        <SBar open={props.open} autoHideDuration={3000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={props.type} sx={{ width: '100%' }}>
-                {props.message}
+        <SBar open={openSnackbar} autoHideDuration={3000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity={snackbarType} sx={{ width: '100%' }}>
+                {snackbarMessage}
             </Alert>
         </SBar>
     )
