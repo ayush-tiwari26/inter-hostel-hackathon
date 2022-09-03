@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       students.belongsTo(models.entities, { foreignKey: 'hostel_id' });
       students.hasMany(models.tickets, { foreignKey: 'created_by' });
+      students.hasMany(models.comments, {
+        foreignKey: 'commented_by',
+        sourceKey: 'id',
+        scope: {
+          commented_by_type: 'admin'
+        },
+        constraints: false
+      });
     }
   }
   students.init({
