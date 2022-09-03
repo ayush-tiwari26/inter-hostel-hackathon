@@ -23,6 +23,10 @@ app.use('/student', studentRouter);
 app.use('/admin', adminRouter);
 app.use('/tickets', ticketsRouter);
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/docs/index.html');
+})
+
 app.all('*', (req, res) => {
     throw new NotFoundError();
 })
