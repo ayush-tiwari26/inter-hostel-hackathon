@@ -1,32 +1,32 @@
-const { students, entities } = require('../models');
+const { admins, entities } = require('../../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { NotAuthorizedError } = require('../errors/not_authorized_error');
+const { NotAuthorizedError } = require('../../errors/not_authorized_error');
 const signin = async (req, res) => {
 
     const { email, password } = req.body;
-    const student = await students.findOne({
+    const user = await admins.findOne({
         where: { email },
         include: [entities]
     });
-    if (!student) {
+    if (!user) {
         throw new NotAuthorizedError('Invalid username');
     }
-    const isMatch = await bcrypt.compare(password, student.password_hash);
+    const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
         throw new NotAuthorizedError('Invalid password');
     }
     const payload = {
-        student: {
-            id: student.id,
-            email: student.email,
-            name: student.name,
-            phone: student.phone,
-            rollno: student.roll_no,
-            hostel: {
-                id: student.entity.id,
-                name: student.entity.name,
-                room: student.room_no
+        admin: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            phone: user.phone,
+            designation: user.designation,
+            entity: {
+                id: user.entity.id,
+                name: user.entity.name,
+                type: user.entity.type
             }
         }
     }

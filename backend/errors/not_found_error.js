@@ -1,7 +1,7 @@
 const CustomError = require('./custom_error');
 class NotFoundError extends CustomError {
+    statusCode = 404;
     constructor() {
-        statusCode = 404;
         super('route not found');
         Object.setPrototypeOf(this, NotFoundError.prototype);
     }
