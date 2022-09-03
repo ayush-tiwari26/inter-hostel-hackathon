@@ -33,6 +33,16 @@ const getTickets = async (req, res) => {
             include: [
                 {
                     model: comments,
+                    include: [
+                        {
+                            model: students,
+                            attributes: ['id', 'name', 'email']
+                        },
+                        {
+                            model: admins,
+                            attributes: ['id', 'name', 'email']
+                        }
+                    ]
                 }, {
                     model: admins,
                     attributes: ['id', 'name', 'email']
@@ -62,6 +72,14 @@ const getTickets = async (req, res) => {
                     name: ticket.student.entity.name
                 }
             },
+            comments: ticket.comments.map(comment => {
+                return {
+                    id: comment.id,
+                    message: comment.message,
+                    commented_by: comment.commented_by_type === 'student' ? comment.student : comment.admin,
+                    commentor_type: comment.commented_by_type,
+                }
+            }),
             assigned_to: ticket.admin,
             createdAt: ticket.createdAt,
             updatedAt: ticket.updatedAt,
