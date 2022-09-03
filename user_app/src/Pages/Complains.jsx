@@ -1,6 +1,7 @@
 import React from 'react'
 import Snackbar from '../Components/Snackbar/Snackbar'
 import Ticket from '../Components/Ticket/Ticket'
+import { Button, Stack } from '@mui/material'
 
 export default function Complaints() {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -12,9 +13,33 @@ export default function Complaints() {
         setSnackbarMessage("Login Successful");
         setSnackbarType("success");
     }, [])
+
+    //Function to create all tickets and messages from the db
+    function makeTickets(){
+        
+    }
+
+    //create new ticket
+    function createNewTicket(){
+        
+    }
+
     return (
         <>
-            <Ticket></Ticket>
+            <Stack
+                direction="column"
+                spacing={2}>
+                <Ticket />
+                <Button
+                    variant="contained"
+                    color="success"
+                    sx={{
+                        width: '200px'
+                    }}
+                    onClick={createNewTicket}>
+                    Create Ticket
+                </Button>
+            </Stack>
             <Snackbar
                 open={openSnackbar}
                 setOpen={setOpenSnackbar}

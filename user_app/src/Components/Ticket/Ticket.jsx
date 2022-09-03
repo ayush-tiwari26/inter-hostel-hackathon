@@ -18,20 +18,36 @@ export default function Ticket(props) {
     //TODO: Get ticketId from props
     // display all existing messages
     // display new message button
+
+    function makeMessages() {
+        //TODO: Create all messaes for this tickets and return it
+        return (
+            <Message
+                message={message}
+                setMessage={setMessage}
+                editDisable={false}>
+            </Message>
+        )
+    }
+
+    function createNewMessage() {
+
+    }
+
     return (
         <div>
             <Stack
                 direction="column"
                 spacing={2}
             >
-                <Message
-                    message={message}
-                    setMessage={setMessage}
-                    editDisable={false}>
-                </Message>
+                {makeMessages()}
                 <Button
                     variant="contained"
-                    color="success">
+                    color="success"
+                    sx={{
+                        width: '100px',
+                    }}
+                    onClick={createNewMessage}>
                     Comment
                 </Button>
             </Stack>
