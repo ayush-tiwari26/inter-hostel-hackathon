@@ -5,7 +5,7 @@ module.exports = {
     const pass = await bcrypt.hash('123456', 10);
     await queryInterface.bulkInsert('students', [{
       name: 'Sudip',
-      email: 'ce20b112@smailiitm.ac.in',
+      email: 'ce20b112@smail.iitm.ac.in',
       password_hash: pass,
       roll_no: 'CE20B112',
       phone: '1234567890',
