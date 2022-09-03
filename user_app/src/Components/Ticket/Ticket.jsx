@@ -1,12 +1,13 @@
 import React from 'react'
 import Message from '../Message/Message';
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
+import { UserContext } from '../../Providers/UserStateProvider';
 
 /**
  * Message Component to load old messages as well create new
- * @param  props.ticketId Id to be displayed
- * @param  props.ticketId Id to be displayed
- * @param  props.ticketId Id to be displayed
+ * @param  props.ticketIdx Idx to be displayed
+ * @param  props.ticketIdx Idx to be displayed
+ * @param  props.ticketIdx Idx to be displayed
  * @param  props.message All necessary message data
  * @param  props.messageTimestamp Timestamp of message to be displayed
  * @param  props.setMessageTimestamp Setter
@@ -30,8 +31,21 @@ export default function Ticket(props) {
         )
     }
 
-    function createNewMessage() {
+    const { userTickets, setUserTickets } = React.useContext(UserContext);
+    const { index, messages, title, description } = props;
 
+    function createNewMessage() {
+        //check if latest message is not empty
+        if (!messages.length === 0 && messages[messages.length - 1].message.trim().length === 0) {
+            //show snackbar
+            //do not add new messagge
+            return;
+        }
+        //create new message
+        const newMessage = <Message />
+        const updatedUserTickets = [...userTickets];
+        updatedUserTickets[index].messages = [...messages, newMessage];
+        setUserTickets(updatedUserTickets)
     }
 
     return (
@@ -40,6 +54,16 @@ export default function Ticket(props) {
                 direction="column"
                 spacing={2}
             >
+                <Typography
+                    variant="h2"
+                    component="h3">
+                    {title}
+                </Typography>;
+                <Typography
+                    variant="h4"
+                    component="h5">
+                    {description}
+                </Typography>
                 {makeMessages()}
                 <Button
                     variant="contained"
