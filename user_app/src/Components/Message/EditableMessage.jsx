@@ -20,6 +20,7 @@ export default function EditableMessage(props) {
     //console.log(userTickets)
 
     function createMessage() {
+        if(message.length === 0) return
         try {
             //send message along props.ticketId to get curr ticket
             //TODO: Create Message Post it in backend 
@@ -32,6 +33,7 @@ export default function EditableMessage(props) {
             console.log("createMessage called")
             console.log(updatedUserTickets[index].messages)
             setUserTickets(updatedUserTickets.map((ticket) => ticket))
+            setMessage("")
         } catch (err) {
             console.log(err);
         }
@@ -40,7 +42,8 @@ export default function EditableMessage(props) {
     return (
         <Stack
             direction="column"
-            spacing={2}>
+            spacing={2}
+        >
             <TextField
                 id="outlined-multiline-flexible"
                 label="Message"
@@ -53,7 +56,10 @@ export default function EditableMessage(props) {
             />
             <Stack
                 direction="row"
-                spacing={2}>
+                spacing={2}
+                sx={{
+                    paddingBottom:2
+                }}>
                 <Button
                     variant="outlined"
                     color="primary"

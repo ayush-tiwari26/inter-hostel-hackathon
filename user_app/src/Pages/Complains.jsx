@@ -1,9 +1,9 @@
 import React from 'react'
 import Snackbar from '../Components/Snackbar/Snackbar'
 import ReadableTicket from '../Components/Ticket/ReadableTicket'
-import { Button, Stack } from '@mui/material'
+import EditableTicket from '../Components/Ticket/EditableTicket'
+import { Button, Grid, Stack } from '@mui/material'
 import { UserContext } from '../Providers/UserStateProvider'
-
 
 export default function Complains() {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
@@ -21,18 +21,37 @@ export default function Complains() {
     function createReadableTickets() {
         //map all tickets from userContext and display
         return (
-            <div>
-                {userTickets.map((ticket, index) => {
-                    return <ReadableTicket
-                        index={index}
-                        messages={ticket.messages}
-                        title={ticket.title}
-                        description={ticket.description}
-                        status={ticket.status}
-                        ticketId={ticket.ticketId}
-                    />
-                })}
-            </div>
+            <Grid
+                spacing={4}
+                sx={{
+                    padding: 2
+                }}>
+                <Grid item>
+                    {userTickets.map((ticket, index) => {
+                        return <ReadableTicket
+                            index={index}
+                            messages={ticket.messages}
+                            title={ticket.title}
+                            description={ticket.description}
+                            status={ticket.status}
+                            ticketId={ticket.ticketId}
+                        />
+                    })}
+                </Grid>
+            </Grid>
+        )
+    }
+
+    function showEditableTicket() {
+        return (
+            <Grid
+                conatiner
+                spacing={4}
+                sx={{
+                    padding: 2
+                }}>
+                <EditableTicket />
+            </Grid>
         )
     }
 
@@ -47,15 +66,7 @@ export default function Complains() {
                 direction="column"
                 spacing={2}>
                 {createReadableTickets()}
-                <Button
-                    variant="contained"
-                    color="success"
-                    sx={{
-                        width: '200px'
-                    }}
-                    onClick={createEditableTicket}>
-                    Create Ticket
-                </Button>
+                {showEditableTicket()}
             </Stack>
             <Snackbar
                 open={openSnackbar}

@@ -44,14 +44,16 @@ export default function ReadableTicket(props) {
         return(
             <EditableMessage index={index} ticketId={ticketId}>
             </EditableMessage>
-        )
+        )  
     }
 
     return (
-        <div>
             <Stack
                 direction="column"
                 spacing={2}
+                sx={{
+                    width:'30%'
+                }}
             >
                 <Typography
                     variant="h5">
@@ -63,16 +65,6 @@ export default function ReadableTicket(props) {
                 </Typography>
                 {createReadableMessages()}
                 {showEditableMessage()}
-                <Button
-                    variant="contained"
-                    color="success"
-                    sx={{
-                        width: '100px',
-                    }}
-                    onClick={createEditableMessage}>
-                    Comment
-                </Button>
             </Stack>
-        </div>
     )
 }
