@@ -64,7 +64,8 @@ export default function ReadableTicket(props) {
             direction="column"
             spacing={2}
             sx={{
-                width: '30%'
+                width: '70%',
+                ml: '15%'
             }}
         >
             <Typography

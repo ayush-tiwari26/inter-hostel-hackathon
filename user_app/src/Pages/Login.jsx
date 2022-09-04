@@ -19,7 +19,7 @@ export default function Login(props) {
     //Function to validate email
     const validateEmail = (email) => {
         //TODO: Validate email
-        return true;
+        return true
         // return String(email)
         //     .toLowerCase()
         //     .match(
