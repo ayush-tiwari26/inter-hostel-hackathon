@@ -1,24 +1,18 @@
-import logo from './logo.svg';
+import React from 'react'
+import Login from './Pages/Login'
+import Complains from './Pages/Complains'
 import './App.css';
+import UserStateProvider from './Providers/UserStateProvider'
+import Snackbar from './Components/Snackbar/Snackbar'
 
 function App() {
+  const [isLogin, setIsLogin] = React.useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserStateProvider>
+      {(isLogin) ? <Complains /> : <Login setIsLogin={setIsLogin} />}
+      <Snackbar />
+    </UserStateProvider>
   );
 }
 
