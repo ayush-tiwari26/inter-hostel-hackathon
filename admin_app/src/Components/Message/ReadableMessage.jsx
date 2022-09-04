@@ -19,7 +19,7 @@ export default function ReadableMessage(props) {
             direction="column"
             spacing={2}
             sx={{
-                padding: 0.5,
+                padding:0.5,
                 color: "black",
             }}>
             <Typography variant="p" component="p">

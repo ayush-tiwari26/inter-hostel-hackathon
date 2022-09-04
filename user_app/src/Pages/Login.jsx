@@ -1,8 +1,6 @@
 import React from 'react'
 import axios from 'axios'
 import { Button, Grid, Stack, TextField } from '@mui/material'
-import Snackbar from '../Components/Snackbar/Snackbar'
-import UserStateProvider from '../Providers/UserStateProvider'
 import { UserContext } from '../Providers/UserStateProvider'
 
 export default function Login(props) {

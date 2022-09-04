@@ -1,27 +1,48 @@
 import React from 'react'
 import Snackbar from '../Components/Snackbar/Snackbar'
 import ReadableTicket from '../Components/Ticket/ReadableTicket'
-import { Button, Grid, Stack } from '@mui/material'
+import { Grid, Stack } from '@mui/material'
 import { AdminContext } from '../Providers/AdminStateProvider'
+import axios from 'axios'
 
 export default function Complains() {
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [snackbarMessage, setSnackbarMessage] = React.useState(false);
-    const [snackbarType, setSnackbarType] = React.useState("success");
+    const {
+        adminTickets,
+        setAdminTickets,
+        adminToken,
+        setOpenSnackbar,
+        setSnackbarMessage,
+        setSnackbarType
+    } = React.useContext(AdminContext);
     React.useEffect(() => {
         //set state for snackbar
-        setOpenSnackbar(true);
-        setSnackbarMessage("Login Successful");
-        setSnackbarType("success");
+        //TODO: Fetch admin tickets
+        let config = {
+            method: 'get',
+            url: 'https://hostel-complaint.herokuapp.com/tickets',
+            headers: {
+                'Authorization': adminToken,
+            }
+        }
+        axios(config)
+            .then((response) => {
+                setAdminTickets(response.data);
+                setSnackbarMessage("Tickets Loaded")
+                setSnackbarType("success")
+                setOpenSnackbar(true)
+            })
+            .catch((error) => {
+                setSnackbarMessage("Failed to load tickets")
+                setSnackbarType("error")
+                setOpenSnackbar(true)
+                console.log(error)
+            });
     }, [])
-    const { adminTickets } = React.useContext(AdminContext);
-
     //Function to create all tickets and messages from the db
     function createReadableTickets() {
         //map all tickets from adminContext and display
         return (
             <Grid
-                spacing={4}
                 sx={{
                     padding: 2
                 }}>
@@ -29,11 +50,12 @@ export default function Complains() {
                     {adminTickets.map((ticket, index) => {
                         return <ReadableTicket
                             index={index}
-                            messages={ticket.messages}
+                            key={index}
+                            messages={ticket.comments}
                             title={ticket.title}
                             description={ticket.description}
                             status={ticket.status}
-                            ticketId={ticket.ticketId}
+                            ticketId={ticket.id}
                         />
                     })}
                 </Grid>
@@ -48,12 +70,7 @@ export default function Complains() {
                 spacing={2}>
                 {createReadableTickets()}
             </Stack>
-            <Snackbar
-                open={openSnackbar}
-                setOpen={setOpenSnackbar}
-                message={snackbarMessage}
-                type={snackbarType}>
-            </Snackbar>
+            <Snackbar />
         </div>
     )
 }

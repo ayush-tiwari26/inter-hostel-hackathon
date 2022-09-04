@@ -1,18 +1,23 @@
 import React from 'react'
+import axios from 'axios'
 import { Button, Grid, Stack, TextField } from '@mui/material'
-import Snackbar from '../Components/Snackbar/Snackbar'
+import { AdminContext } from '../Providers/AdminStateProvider'
 
 export default function Login(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const [snackbarMessage,     setSnackbarMessage] = React.useState(false);
-    const [snackbarType, setSnackbarType] = React.useState("success");
-
+    const {
+        adminToken,
+        setAdminToken,
+        setAdminTickets,
+        setOpenSnackbar,
+        setSnackbarMessage,
+        setSnackbarType
+    } = React.useContext(AdminContext);
     //Function to validate email
     const validateEmail = (email) => {
         //TODO: Validate email
-        return true;
+        return true
         // return String(email)
         //     .toLowerCase()
         //     .match(
@@ -22,16 +27,40 @@ export default function Login(props) {
 
     //Handels the Login for the admin
     function handleLogin() {
-        console.log("Enter Triggered 1");
-        //TODO: Handle Login and set admin as login
+        const data = JSON.stringify({
+            "email": email,
+            "password": password
+        })
+        const config = {
+            method: 'post',
+            url: 'https://hostel-complaint.herokuapp.com/admin/signin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
         if (validateEmail(email)) {
-            console.log("Enter Triggered 2");
-            //TODO: Login the admin
-            setSnackbarMessage("Login Successful");
-            setSnackbarType("success");
-            setOpenSnackbar(true);
-            props.setIsLogin(true);
+            console.log("Login Triggered");
+            axios(config)
+                .then((response) => {
+                    console.log(response.headers.authorization);
+                    setAdminToken(response.headers.authorization)
+                    setSnackbarMessage("Login Successful");
+                    setSnackbarType("success");
+                    setOpenSnackbar(true);
+                    props.setIsLogin(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setSnackbarMessage("Login Failed");
+                    setSnackbarType("error");
+                    setOpenSnackbar(true);
+                    props.setIsLogin(false);
+                });
         } else {
+            setSnackbarMessage("Invalid Email");
+            setSnackbarType("error");
+            setOpenSnackbar(true);
             console.log("email invalid");
         }
     }
@@ -90,12 +119,6 @@ export default function Login(props) {
                     </Stack>
                 </Stack>
             </Grid>
-            <Snackbar
-                open={openSnackbar}
-                setOpen={setOpenSnackbar}
-                message={snackbarMessage}
-                type={snackbarType}>
-            </Snackbar>
         </Grid>
     )
 }
