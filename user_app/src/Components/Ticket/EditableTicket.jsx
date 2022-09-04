@@ -66,10 +66,13 @@ export default function EditableTicket(props) {
     }
 
     return (
-        <div>
             <Stack
                 direction="column"
-                spacing={2}>
+                spacing={2}
+                sx={{
+                    ml:'15%',
+                    width: '70%',
+                }}>
 
                 <Typography variant="h4" component="h2">
                     Raise new Complain Ticket
@@ -97,6 +100,5 @@ export default function EditableTicket(props) {
                     Raise Ticket
                 </Button>
             </Stack>
-        </div>
     )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Stack, TextField } from '@mui/material'
 import { AdminContext } from '../../Providers/AdminStateProvider'
+import axios from 'axios';
 
 /**
  * Message Component to load old messages as well create new
@@ -15,28 +16,50 @@ import { AdminContext } from '../../Providers/AdminStateProvider'
 //Props: message, setMessage, messageTimestamp, setMessageTimestamp, editDisable
 export default function EditableMessage(props) {
     const { index, ticketId } = props;
-    const { adminTickets, setAdminTickets } = React.useContext(AdminContext);
+    console.log(ticketId);
     const [message, setMessage] = React.useState("");
+    const {
+        adminTickets,
+        setAdminTickets,
+        adminToken,
+        setSnackbarMessage,
+        setOpenSnackbar,
+        setSnackbarType
+    } = React.useContext(AdminContext);
     //console.log(adminTickets)
 
     function createMessage() {
-        if(message.length === 0) return
-        try {
-            //send message along props.ticketId to get curr ticket
-            //TODO: Create Message Post it in backend 
-            //TODO {"message":"<>", "ticketId":"<>"}
-            //TODO: Add Message to List of this Ticket Id
-            const updatedAdminTickets = adminTickets
-            updatedAdminTickets[index].messages.push({
-                "message": message
-            })
-            console.log("createMessage called")
-            console.log(updatedAdminTickets[index].messages)
-            setAdminTickets(updatedAdminTickets.map((ticket) => ticket))
-            setMessage("")
-        } catch (err) {
-            console.log(err);
+        console.log(ticketId)
+        if (message.length === 0) return
+        const data = JSON.stringify({
+            "message": message
+        })
+        const config = {
+            method: 'post',
+            url: `https://hostel-complaint.herokuapp.com/tickets/${ticketId}/comment`,
+            headers: {
+                'Authorization': adminToken,
+                'Content-Type': 'application/json'
+            },
+            data: data
         }
+        axios(config)
+            .then((response) => {
+                const updatedTickets = [...adminTickets]
+                updatedTickets[index] = response.data
+                setAdminTickets(updatedTickets)
+                console.log(adminTickets)
+                setMessage("")
+                setOpenSnackbar(true)
+                setSnackbarMessage("Successfully created message")
+                setSnackbarType("success")
+            })
+            .catch((error) => {
+                console.log(error);
+                setOpenSnackbar(true)
+                setSnackbarMessage("Oops! Something went wrong...")
+                setSnackbarType("error")
+            })
     }
 
     return (
@@ -58,7 +81,7 @@ export default function EditableMessage(props) {
                 direction="row"
                 spacing={2}
                 sx={{
-                    paddingBottom:2
+                    paddingBottom: 2
                 }}>
                 <Button
                     variant="outlined"

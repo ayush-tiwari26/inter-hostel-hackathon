@@ -6,45 +6,25 @@ const AdminStateProvider = ({ children }) => {
     const [adminEmail, setAdminEmail] = React.useState("")
     const [adminToken, setAdminToken] = React.useState("")
     const [adminTickets, setAdminTickets] = React.useState([])
-    //TODO admin auth verification
-    React.useEffect(() => {
-        const demoAdminTickets = [
-            {
-                title: "Demo Ticket 1",
-                description: "Demo Description 1",
-                status: "open",
-                messages: [
-                    {
-                        message: "Demo Message 1",
-                        editDisable: true
-                    },
-                    {
-                        message: "Demo Message 2",
-                        editDisable: true
-                    }
-                ]
-            },
-            {
-                title: "Demo Ticket 2",
-                description: "Demo Description 2",
-                status: "open",
-                messages: [
-                    {
-                        message: "Demo Message 1",
-                        editDisable: true
-                    },
-                    {
-                        message: "Demo Message 2",
-                        editDisable: true
-                    }
-                ]
-            }
-        ]
-        setAdminTickets(demoAdminTickets);
-    }, [])
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const [snackbarMessage, setSnackbarMessage] = React.useState(false);
+    const [snackbarType, setSnackbarType] = React.useState("success");
 
     return (
-        <AdminContext.Provider value={{ adminEmail, setAdminEmail, adminToken, setAdminToken, adminTickets, setAdminTickets}}>
+        <AdminContext.Provider value={{
+            adminEmail,
+            setAdminEmail,
+            adminToken,
+            setAdminToken,
+            adminTickets,
+            setAdminTickets,
+            openSnackbar,
+            setOpenSnackbar,
+            snackbarMessage,
+            setSnackbarMessage,
+            snackbarType,
+            setSnackbarType
+        }}>
             {children}
         </AdminContext.Provider>
     )
